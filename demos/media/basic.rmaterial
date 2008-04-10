@@ -1,0 +1,18 @@
+// This is an example rmaterial, a basic single textured, uniformly lit mesh.
+// The only argument is texture, which defaults to <material_name>.png
+
+<% @texture ||= "#{name}.png" %>
+material <%= name %>
+{
+   technique 
+   { 
+      pass 
+      { 
+        lighting off
+		texture_unit 
+        { 
+			texture <%= texture %>
+        } 
+	 }
+  }
+}

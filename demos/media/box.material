@@ -1,0 +1,17 @@
+// This is an example rmaterial, a basic single textured, uniformly lit mesh.
+// The only argument is texture, which defaults to <material_name>.png
+
+material Box
+{
+   technique 
+   { 
+      pass 
+      { 
+        lighting off
+		texture_unit 
+        { 
+			texture box.png
+        } 
+	 }
+  }
+}
