@@ -4,7 +4,7 @@
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Bulletrb provides a set of ruby interfaces for the bullet physics engine.
 
 == FEATURES/PROBLEMS:
 
