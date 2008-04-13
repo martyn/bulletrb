@@ -246,8 +246,8 @@ extern "C"
     define_module("Bullet")
     .define_class<btRigidBody, btCollisionObject>("RigidBody")
     .define_constructor(Constructor<btRigidBody, btRigidBody::btRigidBodyConstructionInfo>())
-    .define_method("get_center_of_mass_position", &RigidBody_GetCenterOfMassPosition)
-    .define_method("get_orientation", &RigidBody_GetOrientation);  
+    .define_method("get_center_of_mass_position", &btRigidBody::getCenterOfMassPosition)
+    .define_method("get_orientation", &btRigidBody::getOrientation);  
 
   Data_Type<btConcaveShape> rb_cConcaveShape =
     define_module("Bullet")

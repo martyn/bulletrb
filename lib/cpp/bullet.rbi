@@ -200,8 +200,8 @@ class RigidBody < CollisionObject
  # def getGravity - error
 #  def getMotionState => RigidBody_GetMotionState -- keep track of your own objects, as you create them.  This crashes.
  # def setGravity(btVector3&) - error
-  def getCenterOfMassPosition => RigidBody_GetCenterOfMassPosition
-  def getOrientation => RigidBody_GetOrientation
+  def getCenterOfMassPosition
+  def getOrientation
     
 class RigidBody::RigidBodyConstructionInfo
   def initialize(btScalar, btMotionState*, btCollisionShape*, btVector3&)
