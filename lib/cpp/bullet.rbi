@@ -6,7 +6,18 @@ class QuadWord
 
 class Vector3 < QuadWord
   def initialize(float, float, float)
-
+  def normalize
+  def normalized
+  def length
+  def dot(btVector3)
+  def cross(btVector3)
+  def distance(btVector3&)
+  def angle(btVector3&)
+  def closestAxis
+  def furthestAxis
+  def maxAxis
+  def minAxis
+  
 class Quaternion < QuadWord
 
 class CollisionConfiguration

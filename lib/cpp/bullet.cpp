@@ -18,7 +18,18 @@ extern "C"
   Data_Type<btVector3> rb_cVector3 =
     define_module("Bullet")
     .define_class<btVector3, btQuadWord>("Vector3")
-    .define_constructor(Constructor<btVector3, float, float, float>());  
+    .define_constructor(Constructor<btVector3, float, float, float>())
+    .define_method("normalize", &btVector3::normalize)
+    .define_method("normalized", &btVector3::normalized)
+    .define_method("length", &btVector3::length)
+    .define_method("dot", &btVector3::dot)
+    .define_method("cross", &btVector3::cross)
+    .define_method("distance", &btVector3::distance)
+    .define_method("angle", &btVector3::angle)
+    .define_method("closest_axis", &btVector3::closestAxis)
+    .define_method("furthest_axis", &btVector3::furthestAxis)
+    .define_method("max_axis", &btVector3::maxAxis)
+    .define_method("min_axis", &btVector3::minAxis);  
 
   Data_Type<btQuaternion> rb_cQuaternion =
     define_module("Bullet")

@@ -13,8 +13,8 @@ class FirstPersonCamera < Shattered::Actor
 		@mouse.set_buffered false
 	end
 	
-	def initialize(camera)
-		@mouse = Shattered::Game.instance.mouse
+	def initialize(camera, mouse)
+		@mouse = mouse
 		self.keymap="fps"
 		@camera = camera
 	  @translate_vector = v(0,0,0)
@@ -27,8 +27,6 @@ class FirstPersonCamera < Shattered::Actor
   end
 	
 	def update_mouse(time_elapsed)
-		@mouse.capture
-
 		if !@mouse.buffered
 			# If this is the first frame, pick a speed
 			if time_elapsed == 0	

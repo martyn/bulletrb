@@ -1,6 +1,5 @@
 quit     => press :escape
 toggleIdle => press :i
-clientResetScene => press :space
-shootBox(getCameraTargetPosition()) => press :period
+shootBox(@camera.get_direction) => press :space
 @shootBoxInitialSpeed += 10.0 => press :plus
 @shootBoxInitialSpeed -= 10.0 => press :minus

@@ -8,3 +8,11 @@ module Bullet
     end
   end
 end
+
+module Ogre
+  class Vector3
+    def to_bullet
+      Bullet::Vector3.new(x,y,z)
+    end
+  end
+end

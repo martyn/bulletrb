@@ -3,16 +3,18 @@ SHATTERED_ROOT = File.expand_path(File.dirname(__FILE__))
   
 # Require shattered if it is in the vendor directory, otherwise use a gem
 begin
-  require File.expand_path(File.join(File.dirname(__FILE__),'vendor','shattered_light','lib','shattered'))
+  require File.expand_path(File.join(File.dirname(__FILE__),'vendor','shattered','lib','shattered'))
 rescue LoadError
   require 'rubygems'
   require 'shattered'
 end
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'bullet')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'ogrerb_debug_draw')
-
-require File.join(File.dirname(__FILE__), 'lib','first_person_camera')
+%w( bullet ogrerb_debug_draw ).each do |file|
+  require File.join(File.dirname(__FILE__), '..', 'lib', file)
+end
+%w( first_person_camera crosshair ).each do |file|
+  require File.join(File.dirname(__FILE__), 'lib', file)
+end
 
 class DemoApplication < Shattered::Game
   STEPSIZE = 5
@@ -25,7 +27,8 @@ class DemoApplication < Shattered::Game
     load_resources("media")
     self.keymap="demo_application"
     @idle = false
-    FirstPersonCamera.new(@camera)
+    FirstPersonCamera.new(@camera, mouse)
+    Crosshair.new()
   #DemoApplication::DemoApplication()
   #		//see btIDebugDraw.h for modes
   #:
@@ -371,42 +374,27 @@ class DemoApplication < Shattered::Game
   #}
   end
 
-  def shootBox(destination)
   #void	DemoApplication::shootBox(const btVector3& destination)
-  #{
+  def shootBox(destination)
+    mass = 10
+    startTransform = Transform.new
+    startTransform.set_identity
+    camPos = @camera.position
+  	startTransform.set_origin(camPos.to_bullet)
 
-  #	if (m_dynamicsWorld)
-  #	{
-  #		float mass = 10.f;
-  #		btTransform startTransform;
-  #		startTransform.setIdentity();
-  #		btVector3 camPos = getCameraPosition();
-  #		startTransform.setOrigin(camPos);
+    @shoot_box_shape ||= BoxShape.new(Vector3.new(1,1,1))
+  	@shots ||= []
+  	body = localCreateRigidBody(mass, startTransform, @shoot_box_shape)
+    @shots << body
 
-  #		if (!m_shootBoxShape)
-  #		{
-  #		//#define TEST_UNIFORM_SCALING_SHAPE 1
-  ##ifdef TEST_UNIFORM_SCALING_SHAPE
-  #		btConvexShape* childShape = new btBoxShape(btVector3(1.f,1.f,1.f));
-  #		m_shootBoxShape = new btUniformScalingShape(childShape,0.5f);
-  ##else
-  #		m_shootBoxShape = new btBoxShape(btVector3(1.f,1.f,1.f));
-  ##endif//
-  #		}
+    linVel = (destination-camPos).to_bullet
+    linVel.normalize()
+    linVel*=@shoot_box_initial_speed;
 
-  #		btRigidBody* body = this->localCreateRigidBody(mass, startTransform,m_shootBoxShape);
-
-  #		btVector3 linVel(destination[0]-camPos[0],destination[1]-camPos[1],destination[2]-camPos[2]);
-  #		linVel.normalize();
-  #		linVel*=m_ShootBoxInitialSpeed;
-
-  #		body->getWorldTransform().setOrigin(camPos);
-  #		body->getWorldTransform().setRotation(btQuaternion(0,0,0,1));
-  #		body->setLinearVelocity(linVel);
-  #		body->setAngularVelocity(btVector3(0,0,0));
-  #	}
-
-  #}
+    body.get_world_transform.set_origin(camPos.to_bullet)
+    body.get_world_transform.set_rotation(Quaternion.new(0,0,0,1))
+    body.set_linear_velocity(linVel)
+    body.set_angular_velocity(Vector3.new(0,0,0))
   end
 
   #int gPickingConstraintId = 0;
@@ -614,35 +602,23 @@ class DemoApplication < Shattered::Game
   #}
   end
 
-  def localCreateRigidBody(mass, startTransform, shape)
   #btRigidBody*	DemoApplication::localCreateRigidBody(float mass, const btTransform& startTransform,btCollisionShape* shape)
-  #{
-  #	//rigidbody is dynamic if and only if mass is non zero, otherwise static
-  #	bool isDynamic = (mass != 0.f);
+  def localCreateRigidBody(mass, startTransform, shape)
 
-  #	btVector3 localInertia(0,0,0);
-  #	if (isDynamic)
-  #		shape->calculateLocalInertia(mass,localInertia);
+    localInertia = Vector3.new(0,0,0)
+    shape.calculate_local_inertia(mass,localInertia)
+    #	using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+    myMotionState = DefaultMotionState.new(startTransform, Transform.get_identity)
+    @motion_states ||= []
+    @motion_states << myMotionState
 
-  #	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+    cInfo = RigidBodyConstructionInfo.new(mass,myMotionState,shape,localInertia);
+    @cInfos ||= []
+    @cInfos << cInfo
+    
+    body = RigidBody.new(cInfo)
 
-  ##define USE_MOTIONSTATE 1
-  ##ifdef USE_MOTIONSTATE
-  #	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-
-  #	btRigidBody::btRigidBodyConstructionInfo cInfo(mass,myMotionState,shape,localInertia);
-
-  #	btRigidBody* body = new btRigidBody(cInfo);
-
-  ##else
-  #	btRigidBody* body = new btRigidBody(mass,0,shape,localInertia);	
-  #	body->setWorldTransform(startTransform);
-  ##endif//
-
-  #	m_dynamicsWorld->addRigidBody(body);
-  #	
-  #	return body;
-  #}
+    return body
   end
 
   def setOrthographicProjection

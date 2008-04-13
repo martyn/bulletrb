@@ -1,4 +1,4 @@
-move(-v(0,0,1)) => hold :w
+move(-:z) => hold :w
 move(:z) => hold :s
 move(:left) => hold :a
 move(:right) => hold :d

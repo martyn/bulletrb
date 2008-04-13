@@ -15,6 +15,12 @@
 
 #include <ruby.h>
 
+template<>
+Rice::Object to_ruby<btVector3>(btVector3 const & x) {
+	return to_ruby(new btVector3(x));
+}
+
+
 template<> 
 btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x) {
   if(x == Rice::Nil)
