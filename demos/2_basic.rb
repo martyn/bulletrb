@@ -97,7 +97,7 @@ class BasicDemo < DemoApplication
     0.upto(ARRAY_SIZE[0]) do |k|
       0.upto(ARRAY_SIZE[1]) do |i|
         0.upto(ARRAY_SIZE[2]) do |j|
-  			  startTransform.set_origin(Vector3.new((2.0)*i + start_x, 2.0*k + start_y, 2.0*j + start_z))
+  			  startTransform.set_origin(Vector3.new((2.0)*i*rand + start_x, 2.0*k + start_y, 2.0*j + start_z))
           
           #	using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
   	  		myMotionState = DefaultMotionState.new(startTransform, Transform.get_identity)
@@ -114,21 +114,22 @@ class BasicDemo < DemoApplication
     end
     
     #Draw the ground
+   
     p = Ogre::Plane.new
     p.normal = Ogre::Vector3.UNIT_Y
-    p.d = 200
+    p.d = 6
 
-    Ogre::MeshManager.instance.create_plane("FloorPlane",
-      Ogre::ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, p, 2000, 2000, 1, 1, true,
+    Ogre::MeshManager.instance.create_plane("FloorPlane", 
+      Ogre::ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, p, 700, 700, 20, 20, true,
       1, 5, 5, Ogre::Vector3.UNIT_Z)
-
+      
     entity = scene_manager.create_entity("floor", "FloorPlane")
-    mat_name = create(:material, :basic, :texture => "ground.png").name
+    mat_name = create(:material, :basic, :texture => "ground.jpg").name
     
     entity.set_material_name(mat_name)
 
     scene_manager.root_scene_node.attach_object(entity)
-    #put a sky in
+#    #put a sky in
     sky = create :material, :basic, :texture => "sky.png"
     scene_manager.set_sky_dome(true, sky.name, 5, 8)
 
