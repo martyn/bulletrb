@@ -97,7 +97,7 @@ class BasicDemo < DemoApplication
     0.upto(ARRAY_SIZE[0]) do |k|
       0.upto(ARRAY_SIZE[1]) do |i|
         0.upto(ARRAY_SIZE[2]) do |j|
-  			  startTransform.set_origin(Vector3.new((2.0)*i*rand + start_x, 2.0*k + start_y, 2.0*j + start_z))
+  			  startTransform.set_origin(Vector3.new((2.0)*i + start_x, 2.0*k + start_y, 2.0*j + start_z))
           
           #	using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
   	  		myMotionState = DefaultMotionState.new(startTransform, Transform.get_identity)
