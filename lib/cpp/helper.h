@@ -20,6 +20,10 @@ Rice::Object to_ruby<btVector3>(btVector3 const & x) {
 	return to_ruby(new btVector3(x));
 }
 
+template<>
+Rice::Object to_ruby<btQuaternion>(btQuaternion const & x) {
+	return to_ruby(new btQuaternion(x));
+}
 
 template<> 
 btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x) {
@@ -42,17 +46,8 @@ btTransform *Transform_GetIdentity(Rice::Object self) {
 		return tr;
 }
 
-
 btVector3 *Transform_GetOrigin(btTransform *self) {
   return new btVector3(self->getOrigin());
-}
-
-btVector3 *RigidBody_GetCenterOfMassPosition(btRigidBody *self) {
-	return new btVector3(self->getCenterOfMassPosition());
-}
-
-btQuaternion *RigidBody_GetOrientation(btRigidBody *self) {
-	return new btQuaternion(self->getOrientation());
 }
 
 // Keep track of your own damn motion state objects!!

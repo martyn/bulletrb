@@ -389,7 +389,7 @@ class DemoApplication < Shattered::Game
 
     linVel = (destination-camPos).to_bullet
     linVel.normalize()
-    linVel*=@shoot_box_initial_speed;
+#    linVel*=@shoot_box_initial_speed;
 
     body.get_world_transform.set_origin(camPos.to_bullet)
     body.get_world_transform.set_rotation(Quaternion.new(0,0,0,1))
