@@ -1,6 +1,6 @@
 = bulletrb
 
-* FIX (url)
+http://rubyforge.org/projects/bulletrb/
 
 == DESCRIPTION:
 
@@ -8,19 +8,26 @@ Bulletrb provides a set of ruby interfaces for the bullet physics engine.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+Provides a 1-1 mapping of the bullet physics engine into ruby.
+Most classes are imported.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+dynamicsWorld = DiscreteDynamicsWorld.new(dispatcher,overlappingPairCache,solver,collisionConfiguration)
+dynamicsWorld.set_gravity(Vector3.new(0,-10,0))
+steps = 99
+steps.times do
+  dynamicsWorld.step_simulation(1.0/60.0, 10, 1.0/60.0)
+end
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+Linux, Windows, or Mac(x86).   To do anything useful you'll probably also want a 3d accelerated video card.
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+sudo gem install bulletrb
+NOTE:  This is once it is released.
 
 == LICENSE:
 
