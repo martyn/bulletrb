@@ -29,6 +29,7 @@ class DemoApplication < Shattered::Game
     @idle = false
     FirstPersonCamera.new(@camera, mouse)
     Crosshair.new()
+    @shoot_box_initial_speed = 100.0
   #DemoApplication::DemoApplication()
   #		//see btIDebugDraw.h for modes
   #:
@@ -387,14 +388,18 @@ class DemoApplication < Shattered::Game
   	body = localCreateRigidBody(mass, startTransform, @shoot_box_shape)
     @shots << body
 
-    linVel = (destination-camPos).to_bullet
-    linVel.normalize()
-#    linVel*=@shoot_box_initial_speed;
+    linVel = destination.normalize
+    linVel*=@shoot_box_initial_speed
+    linVel = linVel.to_bullet
+    log.debug("creating box with linear velocity #{linVel} from destination #{destination} and position #{camPos}")
 
-    body.get_world_transform.set_origin(camPos.to_bullet)
-    body.get_world_transform.set_rotation(Quaternion.new(0,0,0,1))
+#    body.get_world_transform.set_origin(camPos.to_bullet)
+# TODO:    body.get_world_transform.set_rotation(Quaternion.new(0,0,0,1))
     body.set_linear_velocity(linVel)
     body.set_angular_velocity(Vector3.new(0,0,0))
+    body.show_debug(scene_manager, "shot[#{@shots.length}]", @shoot_box_shape)
+    @dynamicsWorld.add_rigid_body(body)
+    @collision_objects << body
   end
 
   #int gPickingConstraintId = 0;

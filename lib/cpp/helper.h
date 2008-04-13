@@ -16,6 +16,16 @@
 #include <ruby.h>
 
 template<>
+Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x) {
+	return to_ruby(new btMatrix3x3(x));
+}
+
+template<>
+Rice::Object to_ruby<btTransform>(btTransform const & x) {
+	return to_ruby(new btTransform(x));
+}
+
+template<>
 Rice::Object to_ruby<btVector3>(btVector3 const & x) {
 	return to_ruby(new btVector3(x));
 }
@@ -49,6 +59,11 @@ btTransform *Transform_GetIdentity(Rice::Object self) {
 btVector3 *Transform_GetOrigin(btTransform *self) {
   return new btVector3(self->getOrigin());
 }
+
+btTransform *CollisionObject_GetWorldTransform(btCollisionObject *self) {
+	return new btTransform(self->getWorldTransform());
+}
+
 
 // Keep track of your own damn motion state objects!!
 // btMotionState *RigidBody_GetMotionState(btRigidBody *self) {

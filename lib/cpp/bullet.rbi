@@ -19,6 +19,26 @@ class Vector3 < QuadWord
   def minAxis
   
 class Quaternion < QuadWord
+  def initialize(btScalar&, btScalar&, btScalar&, btScalar&)
+  def angle(btQuaternion&)
+  def dot(btQuaternion&)
+  def farthest(btQuaternion&)
+  def getAngle
+  def inverse
+  def length
+  def length2
+  def normalize
+  def normalized
+  # def operator*=(btQuaternion&)
+  # def operator*=(btScalar&)
+  # def operator+=(btQuaternion&)
+  # def operator-
+  # def operator-=(btQuaternion&)
+  # def operator/(btScalar&)
+  # def operator/=(btScalar&)
+  def setEuler(btScalar&, btScalar&, btScalar&)
+  def setRotation(btVector3&, btScalar&)
+  def slerp(btQuaternion&, btScalar&)
 
 class CollisionConfiguration
 
@@ -30,6 +50,38 @@ class DefaultCollisionConfiguration < CollisionConfiguration
   def getStackAllocator
   def getCollisionAlgorithmCreateFunc(int, int)
 
+class Transform
+  def initialize
+#  def getBasis
+#  def getBasis  - overloaded
+  def self.getIdentity 
+  def getOrigin => Transform_GetOrigin
+#  def getOrigin
+#  def getOrigin - overloaded
+#  def getRotation -error
+#  def invXform(btVector3&)
+#  def invXform(btVector3&) -overloaded
+#  def inverse -error
+#  def inverseTimes(btTransform&)
+#  def inverseTimes(btTransform&) -overloaded
+#  def mult(btTransform&, btTransform&) -error
+#  def operator*(btTransform&)
+#  def operator*(btVector3&)
+#  def operator*(btTransform&) -overloaded
+#  def operator*=(btTransform&) -operators need fixing
+#  def operator=(btTransform&)
+#  def setBasis(btMatrix3x3&) -error
+  def setIdentity
+  def setOrigin(btVector3&)
+#  def setRotation(btQuaternion&) -error
+#  def transpose -overloaded
+#  def transpose
+#  def x -overloaded
+#  def x
+#  def y
+#  def y
+#  def z
+#  def z
   
 class CollisionDispatcher < Dispatcher
 #  def initialize
@@ -175,6 +227,23 @@ class PolyhedralConvexShape < CollisionShape
 
 class CollisionShape
   def calculateLocalInertia(btScalar,btVector3&)
+  def calculateTemporalAabb(btTransform&, btVector3&, btVector3&, btScalar, btVector3&, btVector3&)
+  def getAabb(btTransform&, btVector3&, btVector3&)
+  def getAngularMotionDisc
+  def getBoundingSphere(btVector3&, btScalar&)
+  def getLocalScaling
+  def getMargin
+  def getName
+  def getShapeType
+# void *  def getUserPointer
+  def isCompound
+  def isConcave
+  def isConvex
+  def isInfinite
+  def isPolyhedral
+  def setLocalScaling(btVector3&)
+  def setMargin(btScalar)
+# void *  def setUserPointer(void*)
 
 class CollisionWorld
 #  def initialize(btDispatcher*, btBroadphaseInterface*, btCollisionConfiguration*)
@@ -202,81 +271,61 @@ class RigidBody < CollisionObject
  # def setGravity(btVector3&) - error
   def getCenterOfMassPosition
   def getOrientation
+  def addConstraintRef(btTypedConstraint*)
+  def applyCentralForce(btVector3&)
+  def applyCentralImpulse(btVector3&)
+  def applyDamping(btScalar)
+  def applyForce(btVector3&, btVector3&)
+  def applyGravity
+  def applyImpulse(btVector3&, btVector3&)
+  def applyTorque(btVector3&)
+  def applyTorqueImpulse(btVector3&)
+  def checkCollideWithOverride(btCollisionObject*)
+  def clearForces
+  def computeAngularImpulseDenominator(btVector3&)
+  def computeImpulseDenominator(btPoint3&, btVector3&)
+  def getAabb(btVector3&, btVector3&)
+  def getActivationState
+  def getAngularFactor
+  def getAngularVelocity
+  # def getBroadphaseProxy
+  def getCenterOfMassTransform
+  # def getCollisionShape
+  def getConstraintRef(int)
+  def getGravity
+  def getInvInertiaDiagLocal
+  def getInvInertiaTensorWorld
+  def getInvMass
+  def getLinearVelocity
+  # def getMotionState
+  def getNumConstraintRefs
+  def getVelocityInLocalPoint(btVector3&)
+  def integrateVelocities(btScalar)
+  def internalApplyImpulse(btVector3&, btVector3&, btScalar)
+  def isInWorld
+  def predictIntegratedTransform(btScalar, btTransform&)
+  def proceedToTransform(btTransform&)
+  def removeConstraintRef(btTypedConstraint*)
+  def saveKinematicState(btScalar)
+  def setAngularFactor(btScalar)
+  def setAngularVelocity(btVector3&)
+  def setCenterOfMassTransform(btTransform&)
+  def setDamping(btScalar, btScalar)
+  def setGravity(btVector3&)
+  def setInvInertiaDiagLocal(btVector3&)
+  def setLinearVelocity(btVector3&)
+  def setMassProps(btScalar, btVector3&)
+  def setMotionState(btMotionState*)
+  def setNewBroadphaseProxy(btBroadphaseProxy*)
+  def setSleepingThresholds(btScalar, btScalar)
+  def translate(btVector3&)
+  # def upcast(btCollisionObject*)
+  def updateDeactivation(btScalar)
+  def updateInertiaTensor
+  def wantsSleeping
     
 class RigidBody::RigidBodyConstructionInfo
   def initialize(btScalar, btMotionState*, btCollisionShape*, btVector3&)
-#  def addConstraintRef(btTypedConstraint*)
-#  def applyCentralForce(btVector3&)
-#  def applyCentralImpulse(btVector3&)
-#  def applyDamping(btScalar)
-#  def applyForce(btVector3&, btVector3&)
-#  def applyGravity
-#  def applyImpulse(btVector3&, btVector3&)
-#  def applyTorque(btVector3&)
-#  def applyTorqueImpulse(btVector3&)
-#  def checkCollideWithOverride(btCollisionObject*)
-#  def clearForces
-#  def computeAngularImpulseDenominator(btVector3&)
-#  def computeImpulseDenominator(btPoint3&, btVector3&)
-#  def cross
-#  def dot(vec))
-#  def dot(vec))
-#  def getAabb(btVector3&, btVector3&)
-#  def getActivationState
-#  def getActivationState
-#  def getActivationState
-#  def getAngularFactor
-#  def getAngularVelocity
-#  def getBroadphaseProxy
-#  def getBroadphaseProxy
-#  def getBroadphaseProxy
-#  def getCenterOfMassTransform
-#  def getCollisionShape
-#  def getCollisionShape
-#  def getConstraintRef(int)
-#  def getGravity
-#  def getInvInertiaDiagLocal
-#  def getInvInertiaTensorWorld
-#  def getInvInertiaTensorWorld
-#  def getInvMass
-#  def getLinearVelocity
-#  def getMotionState
-#  def getMotionState
-#  def getNumConstraintRefs
-#  def getOrigin
-#  def getOrigin
-#  def getVelocityInLocalPoint(btVector3&)
-#  def integrateVelocities(btScalar)
-#  def internalApplyImpulse(btVector3&, btVector3&, btScalar)
-#  def isInWorld
-#  def length2
-#  def length2
-#  def predictIntegratedTransform(btScalar, btTransform&)
-#  def proceedToTransform(btTransform&)
-#  def removeConstraintRef(btTypedConstraint*)
-#  def saveKinematicState(btScalar)
-#  def setAngularFactor(btScalar)
-#  def setAngularVelocity(btVector3&)
-#  def setCenterOfMassTransform(btTransform&)
-#  def setDamping(btScalar, btScalar)
-#  def setGravity(btVector3&)
-#  def setIdentity
-#  def setInvInertiaDiagLocal(btVector3&)
-#  def setLinearVelocity(btVector3&)
-#  def setMassProps(btScalar, btVector3&)
-#  def setMotionState(btMotionState*)
-#  def setNewBroadphaseProxy(btBroadphaseProxy*)
-#  def setSleepingThresholds(btScalar, btScalar)
-#  def setupRigidBody(btRigidBodyConstructionInfo&)
-#  def size
-#  def size
-#  def translate(btVector3&)
-#  def upcast(btCollisionObject*)
-#  def upcast(btCollisionObject*)
-#  def updateDeactivation(btScalar)
-#  def updateInertiaTensor
-#  def wantsSleeping
-
   
 enum DynamicsWorldType
   def SIMPLE_DYNAMICS_WORLD
@@ -322,39 +371,6 @@ class SphereShape < ConvexInternalShape
   #def localGetSupportingVertexWithoutMargin(btVector3&)
   #def setMargin(btScalar)
   #def setMargin(margin))
-  
-class Transform
-  def initialize
-#  def getBasis
-#  def getBasis  - overloaded
-  def self.getIdentity 
-  def getOrigin => Transform_GetOrigin
-#  def getOrigin
-#  def getOrigin - overloaded
-#  def getRotation -error
-#  def invXform(btVector3&)
-#  def invXform(btVector3&) -overloaded
-#  def inverse -error
-#  def inverseTimes(btTransform&)
-#  def inverseTimes(btTransform&) -overloaded
-#  def mult(btTransform&, btTransform&) -error
-#  def operator*(btTransform&)
-#  def operator*(btVector3&)
-#  def operator*(btTransform&) -overloaded
-#  def operator*=(btTransform&) -operators need fixing
-#  def operator=(btTransform&)
-#  def setBasis(btMatrix3x3&) -error
-  def setIdentity
-  def setOrigin(btVector3&)
-#  def setRotation(btQuaternion&) -error
-#  def transpose -overloaded
-#  def transpose
-#  def x -overloaded
-#  def x
-#  def y
-#  def y
-#  def z
-#  def z
 
 class ConvexInternalShape < ConvexShape
   def batchedUnitVectorGetSupportingVertexWithoutMargin(btVector3*, btVector3*, int)
@@ -384,7 +400,51 @@ class MotionState
   def getWorldTransform(btTransform&)
   def setWorldTransform(btTransform&)
 
+class BroadphaseProxy
+
 class CollisionObject
+  def initialize
+  def activate(bool)
+  def forceActivationState(int)
+  # def getActivationState
+  # def getBroadphaseHandle
+  def getCcdSquareMotionThreshold
+  def getCcdSweptSphereRadius
+  def getCollisionFlags
+  # def getCollisionShape
+  def getCompanionId
+  def getDeactivationTime
+  def getFriction
+  def getHitFraction
+  # def getInternalOwner
+  def getInterpolationAngularVelocity
+  def getInterpolationLinearVelocity
+  # def getInterpolationWorldTransform
+  def getIslandTag
+  def getRestitution
+  # def getUserPointer
+  def getWorldTransform => CollisionObject_GetWorldTransform
+  def hasContactResponse
+  def isActive
+  def isKinematicObject
+  def isStaticObject
+  def isStaticOrKinematicObject
+  def mergesSimulationIslands
+  def setActivationState(int)
+  def setBroadphaseHandle(btBroadphaseProxy*)
+  def setCcdSquareMotionThreshold(btScalar)
+  def setCcdSweptSphereRadius(btScalar)
+  def setCollisionFlags(int)
+  def setCollisionShape(btCollisionShape*)
+  def setCompanionId(int)
+  def setDeactivationTime(btScalar)
+  def setFriction(btScalar)
+  def setHitFraction(btScalar)
+  def setInterpolationWorldTransform(btTransform&)
+  def setIslandTag(int)
+  def setRestitution(btScalar)
+  # def setUserPointer(void*)
+  def setWorldTransform(btTransform&)
 
 class StaticPlaneShape < ConcaveShape
   def initialize(btVector3&, btScalar)
