@@ -1,0 +1,37 @@
+!!! Strict
+%html
+  %head
+    %meta{"content"=>"text/html; charset=iso-8859-1", "http-equiv"=>"content-type"}/
+    %title
+      Shattered Light - Develop 3d Games with Ruby!
+    = stylesheets :style, :media => :screen
+  %body
+    #header
+      #header_inner.fixed
+        #logo
+          %h1
+            %span
+              Shattered Light
+          %h2
+            Game development framework
+        #menu
+          = simple_menubar([["About", "/index.html"], ["Screenshots", "/screenshots.html"], ["Download", "/download.html"], ["Documentation", "/documentation.html"], ["Community", "/community.html"]])
+    #main
+      #main_inner.fixed
+        #primaryContent_columnless
+          #columnA_columnless
+            = yield
+        %br.clear
+    #footer.fixed
+      %a{:href => "http://www.ogrerb.rubyforge.org/"}
+        = img "thumb_ogrerb.png"
+      %a{:href => "http://www.ruby-lang.org/"}
+        = img "thumb_ruby.png"
+      %a{:href => "http://www.ogre3d.org/"}
+        = img "thumb_ogre.png"
+    #footer.fixed
+      Design by
+      = link("NodeThirtyThree", "http://www.nodethirtythree.com/")
+      \. Generated with 
+      = link("StaticMatic", "http://staticmatic.rubyforge.org/")
+      \. Shattered Ruby is Copyleft (c) 2008

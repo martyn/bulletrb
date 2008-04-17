@@ -1,12 +1,15 @@
+require 'rubygems'
+require 'pmsrb'
+
 desc "Update the vendor headers/lib for bullet"
 namespace :vendor do
   task :update do
     unless(ENV["BULLET_HOME"])
       puts "Please define BULLET_HOME to point to the new INSTALLED bullet version (/usr/local/ is common on linux).  Thanks, Bye."
     else
-      rm_r File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "include")
-      mkdir_p File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "lib")
-      mkdir_p File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "include")
+      rm_r File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "include", Platform.short_name)
+      mkdir_p File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "lib", Platform.short_name)
+      mkdir_p File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "include", Platform.short_name)
       Dir[ENV["BULLET_HOME"]+"/include/bullet/**/*.h"].each do |file|   
         path = file.split("include/bullet/")[1].split("/")[0...-1].join("/")
         destination_dir = File.join(File.dirname(__FILE__), "..", "vendor", "bullet", "include", path)
