@@ -57,10 +57,10 @@ class BasicDemo < DemoApplication
     @dynamicsWorld.set_gravity(Vector3.new(0,-10,0))
 
 #	///create a few basic rigid bodies
-    groundShape = StaticPlaneShape.new(Vector3.new(0,1,0),50)
+    @groundShape = StaticPlaneShape.new(Vector3.new(0,1,0),50)
 
-    groundTransform = Transform.get_identity
-  	groundTransform.set_origin(Vector3.new(0,-56,0))
+    @groundTransform = Transform.get_identity
+  	@groundTransform.set_origin(Vector3.new(0,-56,0))
 
 #	//We can also use DemoApplication::localCreateRigidBody, but for clarity it is provided here:
 
@@ -68,9 +68,10 @@ class BasicDemo < DemoApplication
     @motion_states = []
     @rb_infos = []
 #		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-		myMotionState = DefaultMotionState.new(groundTransform, Transform.get_identity)
-		rbInfo = RigidBody::RigidBodyConstructionInfo.new(mass=0,myMotionState,groundShape,localInertia)
+		myMotionState = DefaultMotionState.new(@groundTransform, Transform.get_identity)
+		rbInfo = RigidBody::RigidBodyConstructionInfo.new(mass=0,myMotionState,@groundShape,localInertia)
 		body = RigidBody.new(rbInfo)
+		
 		@collision_objects << body
 		@rb_infos << rbInfo
 		@motion_states << myMotionState
@@ -86,7 +87,7 @@ class BasicDemo < DemoApplication
 
 #		/// Create Dynamic Objects
     startTransform = Transform.get_identity
-    mass = 1.0
+    mass = 20.0
     
 		@colShape.calculate_local_inertia(mass,localInertia)
     

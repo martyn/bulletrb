@@ -391,12 +391,12 @@ class DemoApplication < Shattered::Game
     linVel = destination.normalize
     linVel*=@shoot_box_initial_speed
     linVel = linVel.to_bullet
-    log.debug("creating box with linear velocity #{linVel} from destination #{destination} and position #{camPos}")
+    log.info("creating box with linear velocity #{linVel} from destination #{destination} and position #{camPos}")
 
 #    body.get_world_transform.set_origin(camPos.to_bullet)
 # TODO:    body.get_world_transform.set_rotation(Quaternion.new(0,0,0,1))
     body.set_linear_velocity(linVel)
-    body.set_angular_velocity(Vector3.new(0,0,0))
+    body.set_angular_velocity(Vector3.new(10,0,0))
     body.show_debug(scene_manager, "shot[#{@shots.length}]", @shoot_box_shape)
     @dynamicsWorld.add_rigid_body(body)
     @collision_objects << body
