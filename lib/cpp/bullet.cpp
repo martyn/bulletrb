@@ -29,7 +29,8 @@ extern "C"
     .define_method("closest_axis", &btVector3::closestAxis)
     .define_method("furthest_axis", &btVector3::furthestAxis)
     .define_method("max_axis", &btVector3::maxAxis)
-    .define_method("min_axis", &btVector3::minAxis);  
+    .define_method("min_axis", &btVector3::minAxis)
+		.define_method("+", &btVector3::operator+=);
 
   Data_Type<btQuaternion> rb_cQuaternion =
     define_module("Bullet")

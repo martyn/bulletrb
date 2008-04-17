@@ -1,5 +1,7 @@
+require 'rubygems'
+
 require 'mkmf-rice'
-require File.join(File.dirname(__FILE__), '..', '..', 'tasks', 'platform')
+require 'pmsrb'
 
 # Add the arguments to the cpp compiler flags.
 def append_cpp_flags(flags)
