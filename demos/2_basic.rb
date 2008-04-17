@@ -71,6 +71,7 @@ class BasicDemo < DemoApplication
 		myMotionState = DefaultMotionState.new(groundTransform, Transform.get_identity)
 		rbInfo = RigidBody::RigidBodyConstructionInfo.new(mass=0,myMotionState,groundShape,localInertia)
 		body = RigidBody.new(rbInfo)
+
 		@collision_objects << body
 		@rb_infos << rbInfo
 		@motion_states << myMotionState
@@ -113,8 +114,7 @@ class BasicDemo < DemoApplication
       end
     end
     
-    #Draw the ground
-   
+    #Draw the ground   
     p = Ogre::Plane.new
     p.normal = Ogre::Vector3.UNIT_Y
     p.d = 6

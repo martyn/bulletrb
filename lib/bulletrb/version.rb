@@ -5,5 +5,6 @@ module Bulletrb #:nodoc:
     TINY  = 1
 
     STRING = [MAJOR, MINOR, TINY].join('.')
+    VENDOR = "2.68"
   end
 end
