@@ -24,9 +24,9 @@ namespace :vendor do
       working_directory work
       cd "bullet-2.68"
       unless(Platform.mac?)
-        puts build "./configure", "jam"
+        build "./configure", "jam"
       else
-        puts build "cmake . -G Xcode", "xcodebuild"
+        build "cmake . -G Xcode", "xcodebuild"
       end
     end
   end

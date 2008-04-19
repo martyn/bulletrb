@@ -3,6 +3,8 @@ require 'rubygems'
 require 'mkmf-rice'
 require 'pmsrb'
 
+require File.expand_path(File.dirname(__FILE__)+"/../bulletrb/version")
+
 # Add the arguments to the cpp compiler flags.
 def append_cpp_flags(flags)
   flags = [flags] unless flags.is_a?(Array)
@@ -23,19 +25,14 @@ end
 
 # Used like append_ld_flags(libpath("ogre"))
 def libpath(project)
-  " -L\"#{File.expand_path(File.dirname(__FILE__)+"/../../vendor/#{project}/lib/#{Platform.short_name}")}\""
+  " -L\"#{File.expand_path(File.dirname(__FILE__)+"/../../tmp/#{project}/lib/#{Platform.short_name}")}\""
 end
 
-# Used for compilation as a shortcut to -I"../vendor/headers/project"
-def use_headers(*projects)
-  projects += ["wrappers"]
-  projects.each do |project|
-    append_cpp_flags "-I\"#{File.expand_path(File.dirname(__FILE__)+"/../../vendor/#{project}/include")}\""
-  end
-  append_cpp_flags "-I../.."
-end
-use_headers "bullet"
-append_ld_flags(libpath "bullet")
+folder = "bullet-#{Bulletrb::VERSION::VENDOR}"
+
+append_cpp_flags("-I\"#{File.expand_path(File.dirname(__FILE__))}/../../tmp/#{folder}/src\"")
+append_ld_flags(libpath folder)
+
 if(Platform.linux?)
   append_ld_flags("-lbulletcollision -lbulletdynamics -lbulletmath")
 elsif(Platform.mac?)
