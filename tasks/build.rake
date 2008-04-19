@@ -39,5 +39,7 @@ namespace :build do
   
   desc "Regenerate and rebuild"
   task :rebuild => [:generate_rice, :build]
+  
+  task :default => :rebuild
 end
 
