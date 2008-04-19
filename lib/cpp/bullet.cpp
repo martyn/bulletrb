@@ -87,8 +87,7 @@ extern "C"
 
   Data_Type<btOverlappingPairCache> rb_cOverlappingPairCache =
     define_module("Bullet")
-    .define_class<btOverlappingPairCache>("OverlappingPairCache")
-    .define_constructor(Constructor<btOverlappingPairCache>());  
+    .define_class<btOverlappingPairCache>("OverlappingPairCache");  
 
   Data_Type<btCollisionDispatcher> rb_cCollisionDispatcher =
     define_module("Bullet")

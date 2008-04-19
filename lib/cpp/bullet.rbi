@@ -108,7 +108,7 @@ class CollisionDispatcher < Dispatcher
 #  def setNearCallback(btNearCallback) - requests function pointer
 
 class OverlappingPairCache
-  def initialize
+#  def initialize
 
 class Dispatcher
 #  def initialize
