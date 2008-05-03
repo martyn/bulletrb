@@ -26,7 +26,7 @@ class BasicDemo < DemoApplication
     @collision_objects = []
   end
   
-  def update_debug_objects(time_elapsed)
+  def update_debug_objects
     GC.start
     @dynamicsWorld.step_simulation(time_elapsed, 10, 1.0/60.0)
     @collision_objects.each do |obj|
