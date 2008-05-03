@@ -19,6 +19,7 @@ START_POS =[-5, -5, -3]
 #using motionstate is recommended, it provides interpusing motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objectsolation capabilities, and only synchronizes 'active' objects
 
 class BasicDemo < DemoApplication
+  title "Basic Box Demo"
   timer :every => :frame, :action => :update_debug_objects
   def initialize
     super
@@ -26,6 +27,7 @@ class BasicDemo < DemoApplication
   end
   
   def update_debug_objects(time_elapsed)
+    GC.start
     @dynamicsWorld.step_simulation(time_elapsed, 10, 1.0/60.0)
     @collision_objects.each do |obj|
       obj.update_debug_mesh
@@ -87,7 +89,7 @@ class BasicDemo < DemoApplication
 
 #		/// Create Dynamic Objects
     startTransform = Transform.get_identity
-    mass = 1.0
+    mass = 10.0
     
 		@colShape.calculate_local_inertia(mass,localInertia)
     

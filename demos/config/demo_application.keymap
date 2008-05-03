@@ -1,3 +1,0 @@
-quit     => press :escape
-toggleIdle => press :i
-shootBox(@camera.get_direction) => press :space

@@ -1,0 +1,16 @@
+quit     => press :escape
+toggleIdle => press :i
+shootBox(@camera.get_direction) => press :space or mouse.press :left
+
+move(-:z) => hold :w
+move(:z) => hold :s
+move(:left) => hold :a
+move(:right) => hold :d
+
+#dvorak
+move(-:z) => hold ","
+move(:z) => hold :o
+move(:left) => hold :a
+move(:right) => hold :e
+
+look => mouse.move

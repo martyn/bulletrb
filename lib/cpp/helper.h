@@ -17,22 +17,22 @@
 
 template<>
 Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x) {
-	return to_ruby(new btMatrix3x3(x));
+	return Rice::Data_Object<btMatrix3x3>((btMatrix3x3 *)&x, Rice::Data_Type<btMatrix3x3>::klass(), 0, 0);
 }
 
 template<>
 Rice::Object to_ruby<btTransform>(btTransform const & x) {
-	return to_ruby(new btTransform(x));
+	return Rice::Data_Object<btTransform>((btTransform *)&x, Rice::Data_Type<btTransform>::klass(), 0, 0);
 }
 
 template<>
 Rice::Object to_ruby<btVector3>(btVector3 const & x) {
-	return to_ruby(new btVector3(x));
+	return Rice::Data_Object<btVector3>((btVector3 *)&x, Rice::Data_Type<btVector3>::klass(), 0, 0);
 }
 
 template<>
 Rice::Object to_ruby<btQuaternion>(btQuaternion const & x) {
-	return to_ruby(new btQuaternion(x));
+	return Rice::Data_Object<btQuaternion>((btQuaternion *)&x, Rice::Data_Type<btQuaternion>::klass(), 0, 0);
 }
 
 template<> 

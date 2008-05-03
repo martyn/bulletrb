@@ -12,7 +12,7 @@ end
 %w( bullet ogrerb_debug_draw ).each do |file|
   require File.join(File.dirname(__FILE__), '..', 'lib', file)
 end
-%w( first_person_camera crosshair ).each do |file|
+%w( crosshair ).each do |file|
   require File.join(File.dirname(__FILE__), 'lib', file)
 end
 
@@ -25,9 +25,8 @@ class DemoApplication < Shattered::Game
     @camera.look_at(v(1,5,-8))
     create_viewport(:color => rgb(0.2,0,0))
     load_resources("media")
-    self.keymap="demo_application"
+    controls("demo_application").on
     @idle = false
-    FirstPersonCamera.new(@camera, mouse)
     Crosshair.new()
     @shoot_box_initial_speed = 100.0
   #DemoApplication::DemoApplication()
@@ -105,6 +104,18 @@ class DemoApplication < Shattered::Game
     @idle = !@idle
   end
 
+
+ 
+  def move(direction)
+    @camera.position += direction * @time_elapsed * @speed
+  end
+  
+  def look
+    @camera.yaw(Ogre::Radian.new(-@mouse.x*0.01))
+    @camera.pitch(Ogre::Radian.new(-@mouse.y*0.01))
+  end
+  
+  
   def updateCamera
   #void DemoApplication::updateCamera() {
 
