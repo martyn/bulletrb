@@ -25,7 +25,7 @@ namespace :vendor do
   task :build do
     PMS::vendor do
       working_directory work
-      cd "bullet-2.68"
+      cd "bullet-#{Bulletrb::VERSION::VENDOR}"
       unless(Platform.mac?)
         build "./configure", "jam"
       else

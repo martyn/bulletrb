@@ -107,7 +107,7 @@ class DemoApplication < Shattered::Game
 
  
   def move(direction)
-    @speed = 30
+    @speed ||= 30
     @camera.move_relative(time_elapsed * @speed * direction)
   end
   
