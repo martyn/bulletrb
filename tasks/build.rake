@@ -16,10 +16,11 @@ namespace :build do
   end
   
   desc "Update the rb++ bindings"
-  task :generate => [:generate_namespace, :generate_rbpp]
+  task :generate => [:clean, :generate_namespace, :generate_rbpp]
   
-  task :clean_rbpp do
-    FileUtils.rm_r File.dirname(__FILE__)+"/generated"
+  task :clean do
+    target = File.dirname(__FILE__)+"/../lib/cpp/generated"
+    FileUtils.rm_r target if File.directory?(target) 
   end
   
   task :generate_rbpp do
@@ -30,7 +31,7 @@ namespace :build do
     generate_headers
   end
   
-  task :rebuild => [:clean_rbpp, :generate, :build]
+  task :rebuild => [:generate, :build]
   task :default => :build
 end
 

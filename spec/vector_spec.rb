@@ -6,6 +6,7 @@ describe "BTVector" do
 
   it "has a valid constructor" do
     vector = Bullet::Vector3.new(0,1,2)
+    puts vector.x, vector.y, vector.z
     vector.x.should == 0
     vector.y.should == 1
     vector.z.should == 2

@@ -1,10 +1,9 @@
+#ifndef BULLET_HELPER
+#define BULLET_HELPER
+
 #include <vector>
 
-#include "btBulletCollisionCommon.h"
-#include "btBulletDynamicsCommon.h"
-#include "BulletCollision/CollisionDispatch/btSimulationIslandManager.h"
-#include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
-#include "LinearMath/btAlignedObjectArray.h"
+#include "bullet_namespace.h"
 
 #include "rice/Class.hpp"
 #include "rice/Data_Type.hpp"
@@ -16,53 +15,55 @@
 #include <ruby.h>
 
 template<>
-Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x) {
-	return Rice::Data_Object<btMatrix3x3>((btMatrix3x3 *)&x, Rice::Data_Type<btMatrix3x3>::klass(), 0, 0);
-}
+Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x);
 
 template<>
-Rice::Object to_ruby<btTransform>(btTransform const & x) {
-	return Rice::Data_Object<btTransform>((btTransform *)&x, Rice::Data_Type<btTransform>::klass(), 0, 0);
-}
+Rice::Object to_ruby<btTransform>(btTransform const & x); 
 
 template<>
-Rice::Object to_ruby<btVector3>(btVector3 const & x) {
-	return Rice::Data_Object<btVector3>((btVector3 *)&x, Rice::Data_Type<btVector3>::klass(), 0, 0);
-}
+Rice::Object to_ruby<btVector3>(btVector3 const & x);
 
 template<>
-Rice::Object to_ruby<btQuaternion>(btQuaternion const & x) {
-	return Rice::Data_Object<btQuaternion>((btQuaternion *)&x, Rice::Data_Type<btQuaternion>::klass(), 0, 0);
-}
+Rice::Object to_ruby<btQuaternion>(btQuaternion const & x);
+
+//template<>
+//Rice::Object to_ruby<btUnionFind>(btUnionFind const & x);
+
+template<>
+Rice::Object to_ruby<btDispatcherInfo>(btDispatcherInfo const & x);
+
+template<>
+Rice::Object to_ruby<btRigidBody>(btRigidBody const & x);
+
+template<>
+Rice::Object to_ruby<btDynamicsWorldType>(btDynamicsWorldType const & x);
+
+//template<>
+//Rice::Object to_ruby<btTriangle>(btTriangle const & x) ;
+
+template<>
+Rice::Object to_ruby<btTypedConstraintType>(btTypedConstraintType const & x);
+
+template<>
+Rice::Object to_ruby<btWheelInfo>(btWheelInfo const & x);
+
+template<>
+Rice::Object to_ruby<btVector4>(btVector4 const & x);
+
+template<>
+Rice::Object to_ruby<btContactSolverInfo>(btContactSolverInfo const & x);
 
 template<> 
-btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x) {
-  if(x == Rice::Nil)
-    return 0;
-  
-  if(std::string("Bullet::OverlappingPairCache") == x.class_of().name().c_str())
-    return (btOverlappingPairCache*)&x;
+btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x);
 
-  std::string s("Unable to convert ");
-  s += x.class_of().name().c_str();
-  s += " to ";
-  s += "btOverlappingPairCache*";
-  throw std::invalid_argument(s.c_str());
-}
+template<>
+float const& from_ruby<float const&>(Rice::Object x);
 
-btTransform *Transform_GetIdentity(Rice::Object self) {
-  	btTransform *tr = new btTransform();
-		tr->setIdentity();
-		return tr;
-}
+btTransform *Transform_GetIdentity(Rice::Object self);
 
-btVector3 *Transform_GetOrigin(btTransform *self) {
-  return new btVector3(self->getOrigin());
-}
+btVector3 *Transform_GetOrigin(btTransform *self);
 
-btTransform *CollisionObject_GetWorldTransform(btCollisionObject *self) {
-	return new btTransform(self->getWorldTransform());
-}
+btTransform *CollisionObject_GetWorldTransform(btCollisionObject *self);
 
 
 // Keep track of your own damn motion state objects!!
@@ -78,3 +79,6 @@ btTransform *CollisionObject_GetWorldTransform(btCollisionObject *self) {
 //  }
 //  return array;
 //}
+
+
+#endif
