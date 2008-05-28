@@ -26,8 +26,8 @@ Rice::Object to_ruby<btVector3>(btVector3 const & x);
 template<>
 Rice::Object to_ruby<btQuaternion>(btQuaternion const & x);
 
-//template<>
-//Rice::Object to_ruby<btUnionFind>(btUnionFind const & x);
+template<>
+Rice::Object to_ruby<btUnionFind>(btUnionFind const & x);
 
 template<>
 Rice::Object to_ruby<btDispatcherInfo>(btDispatcherInfo const & x);
@@ -48,6 +48,12 @@ template<>
 Rice::Object to_ruby<btWheelInfo>(btWheelInfo const & x);
 
 template<>
+Rice::Object to_ruby<unsigned short>(const unsigned short& x);
+
+template<>
+Rice::Object to_ruby<btBvhSubtreeInfo>(btBvhSubtreeInfo const & x);
+
+template<>
 Rice::Object to_ruby<btVector4>(btVector4 const & x);
 
 template<>
@@ -55,6 +61,15 @@ Rice::Object to_ruby<btContactSolverInfo>(btContactSolverInfo const & x);
 
 template<> 
 btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x);
+
+template<> 
+btPoolAllocator* from_ruby<btPoolAllocator*>(Rice::Object x);
+
+template<> 
+btStackAlloc* from_ruby<btStackAlloc*>(Rice::Object x);
+
+template<>
+unsigned short from_ruby<unsigned short>(Rice::Object x);
 
 template<>
 float const& from_ruby<float const&>(Rice::Object x);

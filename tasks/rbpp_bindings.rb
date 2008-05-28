@@ -30,77 +30,10 @@ def generate_rbpp
   end
   
   e.module "Bullet" do |m|
-  
-    node.classes.sort_by {|c| c.name}.each do |cls|
-      if blacklist cls
-        puts "ignoring #{cls.name}"
-        cls.ignore
-      elsif /^bt/ === cls.name
-        puts "exporting #{cls.name}"
-        cls.wrap_as cls.name.gsub(/^bt/, "")
-        m.includes cls
-      else
-        puts "ignoring #{cls.name} as external class"
-        cls.ignore
-      end
-      
-      methods_hash = {}
-      cls.methods.sort_by { |method| method.name}.each do |method|
-        if methods_hash[method.name]
-          methods_hash[method.name].ignore
-          method.ignore
-          puts "  ignoring #{method.name} due to overloading"
-        end
-        methods_hash[method.name] = method
-        
-        if  /UserPointer$/ === method.name  ||
-            /^free/ === method.name         ||
-            /^allocate/ === method.name     ||
-            /Callback$/ === method.name     ||
-            /deSerializeInPlace$/ === method.name ||
-            /[gsGS]et.*Func$/ === method.name
-          method.ignore 
-          puts "  ignoring #{method.name} for using void *"
-        end
-        
-        if blacklist_name method.attributes["demangled"]
-          method.ignore
-          puts "  ignoring #{method.name} - blacklisted"
-        end
-      end
-      
-      cls.constructors.each do |constructor|
-        if blacklist_name(constructor.attributes["demangled"])
-          puts "ignoring #{cls.name} constructor for using blacklisted type"
-          constructor.ignore
-        end  
-      end
-      
-      abstract_filter(cls)
-    end
-    
-    # abstract classes not caught
-    %w(btEmptyShape btSimpleDynamicsWorld btTriangleMeshShape).each do |cname|
-      puts "ignoring #{cname} - custom abstract"
-      mark_abstract(node.classes(cname))
-    end
-    
-    ignore node.classes("btOptimizedBvh").methods("getLeafNodeArray")
-    ignore node.classes("btOptimizedBvh").methods("getSubtreeInfoArray")
-    ignore node.classes("btOptimizedBvh").methods("getQuantizedNodeArray")
-    ignore node.classes("btDefaultVehicleRaycaster").methods("castRay")
-  
-    
-    %w(btNullPairCache btSortedOverlappingPairCache btHashedOverlappingPairCache btOverlappingPairCache).each do |c_name|
-      node.classes(c_name).methods.each do |method|
-        ignore method if /Pair/ === method.name
-      end
-    end
-    
-    node.structs.each do |struct|
-      clean_up_struct struct
-    end
-  end
+    wrap_into( m, [node.classes, node.structs].flatten)
+  end    
+
+  clean_up_custom(node)
   
   puts "creating bindings..."
   e.build
@@ -123,21 +56,108 @@ def generate_rbpp
   
 end
 
+def wrap_into(mod, classes)
+  return if classes.empty?
+  classes.delete_if { |c| c.name.nil? }
+  classes.sort_by {|c| c.name}.each do |cls|
+    clean_up(cls, mod)
+    clean_up_methods(cls)
+    clean_up_constructors(cls)
+    wrap_into(cls, [cls.classes, cls.structs].flatten)
+  end
+end
+
+def clean_up_methods(cls) 
+  methods_hash = {}
+  cls.methods.sort_by { |method| method.name}.each do |method|
+    if methods_hash[method.name]
+      if(method.name == "getOrigin")
+        method.calls("Transform_GetOrigin")
+      else
+        method.ignore
+        methods_hash[method.name].ignore
+        puts "  ignoring #{method.name} due to overloading"
+      end
+    end
+    methods_hash[method.name] = method
+    
+    if  /UserPointer$/ === method.name  ||
+        /^free/ === method.name         ||
+        /^allocate/ === method.name     ||
+        /Callback$/ === method.name     ||
+        /deSerializeInPlace$/ === method.name ||
+        /[gsGS]et.*Func$/ === method.name ||
+        /castRay$/ === method.name
+      method.ignore 
+      puts "  ignoring #{method.name} for using void *"
+    end
+    
+    if blacklist_name method.attributes["demangled"]
+      method.ignore
+      puts "  ignoring #{method.name} - blacklisted"
+    end
+  end
+end
+
+def clean_up_constructors(cls)
+  cls.constructors.each do |constructor|
+    if blacklist_name(constructor.attributes["demangled"])
+      puts "ignoring #{cls.name} constructor for using blacklisted type"
+      constructor.ignore
+    end  
+  end
+  
+  abstract_filter(cls)
+end
+
+def clean_up_custom(node)
+  # abstract classes not caught
+  %w(btEmptyShape btSimpleDynamicsWorld btTriangleMeshShape).each do |cname|
+    puts "ignoring #{cname} - custom abstract"
+    mark_abstract(node.classes(cname))
+  end
+  
+  ignore node.classes("btOptimizedBvh").methods("getLeafNodeArray")
+  ignore node.classes("btOptimizedBvh").methods("getSubtreeInfoArray")
+  ignore node.classes("btOptimizedBvh").methods("getQuantizedNodeArray")
+  ignore node.classes("btTransform").constructors[1..-1]
+  ignore node.structs("btVehicleRaycaster").constructors
+  ignore node.structs("btStorageResult").constructors
+  ignore node.structs("btDiscreteCollisionDetectorInterface").structs("Result").constructors
+  
+  ignore node.structs("btCollisionResult")
+  ignore node.structs("btVehicleTuning")
+  ignore node.structs("btConvexCastResult")
+  ignore node.structs("btCollisionAlgorithmConstructionInfo")
+  ignore node.classes("btMultiSapBroadphase").structs("btBridgeProxy")
+
+  %w(btNullPairCache btSortedOverlappingPairCache btHashedOverlappingPairCache btOverlappingPairCache).each do |c_name|
+    node.classes(c_name).methods.each do |method|
+      ignore method if /Pair/ === method.name
+    end
+  end
+end
 
 # This method cleans up structs
-def clean_up_struct(struct)
-  if !(/^bt/ === struct.name) || blacklist_name(struct.name)
-    puts "ignoring #{struct.name} as struct"
+def clean_up(struct, mod)
+  if !(/^bt/ === struct.name)
+    puts "ignoring #{struct.name}"
+    struct.ignore
+  elsif blacklist_name(struct.name)
+    puts "ignoring #{struct.name} - blacklisted"
     struct.ignore
   else
-    puts "exporting struct #{struct.name}"
+    puts "exporting #{struct.name[2..-1]}"
+    mod.includes struct.wrap_as(struct.name[2..-1])
   end
 end
 
 # custom ignore an element
 def ignore(node)
-  puts "ignoring #{node.name} - custom ignore"
-  node.ignore
+  [node].flatten.each do |n|
+    puts "ignoring #{n.qualified_name} - custom ignore"
+    n.ignore
+  end
 end
 
 # ignore abstract constructors
@@ -169,13 +189,18 @@ def blacklist_name(name)
   
   return true if /btRaycastVehicle/ === name
   return true if /createAabbTreeFromChildren/ === name
-  
+  return true if /DiscreteCollisionDetectorInterface/ === name
+  return true if /Result$/ === name
+  return true if /btBridgeProxy/ === name
+  return true if /16u/ === name
+  return true if /AlignedObjectArray/ === name
+  return true if /processAllOverlappingPairs/ === name
   ##
 
   return true if /Callback$/ === name
   return true if /Solve2LinearConstraint$/ === name # Not sure what this class does
-  return true if name.include? "<" # ignore templates
-  return true if name.include? "_" # ignore templates
+#  return true if name.include? "<" # ignore templates
+#  return true if name.include? "_" # ignore templates
   return false
 end
 
@@ -194,6 +219,10 @@ def generate_headers
     header.puts "  #include \"#{file}\""
   end
   header.puts "  #include \"#{File.join($bullet_home, "LinearMath", "btPoolAllocator.h")}\""
+  header.puts "  #include \"#{File.join($bullet_home, "LinearMath", "btStackAlloc.h")}\""
+  header.puts "  #include \"#{File.join($bullet_home, "BulletCollision", "NarrowPhaseCollision", "btVoronoiSimplexSolver.h")}\""
+  header.puts "  #include \"#{File.join($bullet_home, "BulletCollision", "CollisionDispatch", "btSimulationIslandManager.h")}\""
+  header.puts "  #include \"#{File.join($bullet_home, "BulletCollision", "NarrowPhaseCollision", "btGjkEpaPenetrationDepthSolver.h")}\""
   #header.puts "}"
   
   header.puts "#endif"

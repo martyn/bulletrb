@@ -12,39 +12,22 @@
 
 #include <iostream>
 
-template<>
-Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x) {
-	return Rice::Data_Object<btMatrix3x3>((btMatrix3x3 *)&x, Rice::Data_Type<btMatrix3x3>::klass(), 0, 0);
-}
 
-template<>
-Rice::Object to_ruby<btTransform>(btTransform const & x) {
-	return Rice::Data_Object<btTransform>((btTransform *)&x, Rice::Data_Type<btTransform>::klass(), 0, 0);
-}
 
-template<>
-Rice::Object to_ruby<btVector3>(btVector3 const & x) {
-	return Rice::Data_Object<btVector3>((btVector3 *)&x, Rice::Data_Type<btVector3>::klass(), 0, 0);
-}
 
 template<>
 Rice::Object to_ruby<btQuaternion>(btQuaternion const & x) {
 	return Rice::Data_Object<btQuaternion>((btQuaternion *)&x, Rice::Data_Type<btQuaternion>::klass(), 0, 0);
 }
 
-//template<>
-//Rice::Object to_ruby<btUnionFind>(btUnionFind const & x) {
-//	return Rice::Data_Object<btUnionFind>((btUnionFind *)&x, Rice::Data_Type<btUnionFind>::klass(), 0, 0);
-//}
+template<>
+Rice::Object to_ruby<btUnionFind>(btUnionFind const & x) {
+	return Rice::Data_Object<btUnionFind>((btUnionFind *)&x, Rice::Data_Type<btUnionFind>::klass(), 0, 0);
+}
 
 template<>
 Rice::Object to_ruby<btDispatcherInfo>(btDispatcherInfo const & x) {
 	return Rice::Data_Object<btDispatcherInfo>((btDispatcherInfo *)&x, Rice::Data_Type<btDispatcherInfo>::klass(), 0, 0);
-}
-
-template<>
-Rice::Object to_ruby<btRigidBody>(btRigidBody const & x) {
-	return Rice::Data_Object<btRigidBody>((btRigidBody *)&x, Rice::Data_Type<btRigidBody>::klass(), 0, 0);
 }
 
 template<>
@@ -69,6 +52,11 @@ Rice::Object to_ruby<btWheelInfo>(btWheelInfo const & x) {
 }
 
 template<>
+Rice::Object to_ruby<btBvhSubtreeInfo>(btBvhSubtreeInfo const & x) {
+	return Rice::Data_Object<btBvhSubtreeInfo>((btBvhSubtreeInfo *)&x, Rice::Data_Type<btBvhSubtreeInfo>::klass(), 0, 0);
+}
+
+template<>
 Rice::Object to_ruby<btVector4>(btVector4 const & x) {
 	return Rice::Data_Object<btVector4>((btVector4 *)&x, Rice::Data_Type<btVector4>::klass(), 0, 0);
 }
@@ -79,8 +67,19 @@ Rice::Object to_ruby<btContactSolverInfo>(btContactSolverInfo const & x) {
 }
 
 template<>
-float const from_ruby<float const>(Rice::Object x) {
-  return float(NUM2DBL(x)); 
+float const& from_ruby<float const&>(Rice::Object x) {
+  return *(new float(NUM2DBL(x))); //TODO: Memory leak
+}
+
+
+template<>
+Rice::Object to_ruby<unsigned short>(const unsigned short& x) {
+  return UINT2NUM(x);
+}
+
+template<>
+unsigned short from_ruby<unsigned short>(Rice::Object x) {
+  return NUM2UINT(x);
 }
 
 template<> 
@@ -95,6 +94,36 @@ btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x) {
   s += x.class_of().name().c_str();
   s += " to ";
   s += "btOverlappingPairCache*";
+  throw std::invalid_argument(s.c_str());
+}
+
+template<> 
+btStackAlloc* from_ruby<btStackAlloc*>(Rice::Object x) {
+  if(x == Rice::Nil)
+    return 0;
+  
+  if(std::string("Bullet::StackAlloc") == x.class_of().name().c_str())
+    return (btStackAlloc*)&x;
+
+  std::string s("Unable to convert ");
+  s += x.class_of().name().c_str();
+  s += " to ";
+  s += "btStackAlloc*";
+  throw std::invalid_argument(s.c_str());
+}
+
+template<> 
+btPoolAllocator* from_ruby<btPoolAllocator*>(Rice::Object x) {
+  if(x == Rice::Nil)
+    return 0;
+  
+  if(std::string("Bullet::PoolAllocator") == x.class_of().name().c_str())
+    return (btPoolAllocator*)&x;
+
+  std::string s("Unable to convert ");
+  s += x.class_of().name().c_str();
+  s += " to ";
+  s += "btPoolAllocator*";
   throw std::invalid_argument(s.c_str());
 }
 

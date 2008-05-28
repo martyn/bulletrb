@@ -5,7 +5,7 @@ collision_objects = []
 motion_states = []
 
 #collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-collisionConfiguration = DefaultCollisionConfiguration.new()
+collisionConfiguration = DefaultCollisionConfiguration.new(nil,nil,nil)
 
 #use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 dispatcher = CollisionDispatcher.new(collisionConfiguration)
@@ -34,8 +34,7 @@ localInertia = Vector3.new(0,0,0)
 myMotionState = DefaultMotionState.new groundTransform, Transform.get_identity
 motion_states << myMotionState
 
-rbInfo = RigidBodyConstructionInfo.new 0, myMotionState, groundShape, localInertia
-body = RigidBody.new rbInfo
+body = RigidBody.new 0, myMotionState, groundShape, localInertia
 collision_objects << body
 
 #add the body to the dynamics world  
@@ -52,8 +51,7 @@ startTransform.set_origin Vector3.new(2,10,0)
 myMotionState = DefaultMotionState.new startTransform, Transform.get_identity
 motion_states << myMotionState
 
-rbInfo = RigidBodyConstructionInfo.new 1, myMotionState, colShape, localInertia
-body = RigidBody.new rbInfo
+body = RigidBody.new 1, myMotionState, colShape, localInertia
 collision_objects << body
 
 dynamicsWorld.add_rigid_body body
