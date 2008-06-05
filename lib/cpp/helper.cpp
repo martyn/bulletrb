@@ -12,8 +12,20 @@
 
 #include <iostream>
 
+template<>
+Rice::Object to_ruby<btManifoldPoint>(btManifoldPoint const & x) {
+  return Rice::Data_Object<btManifoldPoint>((btManifoldPoint *)&x, Rice::Data_Type<btManifoldPoint>::klass(), 0, 0);
+}
 
+template<>
+Rice::Object to_ruby<btAlignedObjectArray<btBroadphaseInterface*> >(btAlignedObjectArray<btBroadphaseInterface*> const & x) {
+  return Rice::Data_Object<btAlignedObjectArray<btBroadphaseInterface*> >((btAlignedObjectArray<btBroadphaseInterface*> *)&x, Rice::Data_Type<btAlignedObjectArray<btBroadphaseInterface*> >::klass(), 0, 0);
+}
 
+template<>
+Rice::Object to_ruby<btAlignedObjectArray<btCollisionObject*> >(btAlignedObjectArray<btCollisionObject*> const & x) {
+  return Rice::Data_Object<btAlignedObjectArray<btCollisionObject*> >((btAlignedObjectArray<btCollisionObject*> *)&x, Rice::Data_Type<btAlignedObjectArray<btCollisionObject*> >::klass(), 0, 0);
+}
 
 template<>
 Rice::Object to_ruby<btQuaternion>(btQuaternion const & x) {

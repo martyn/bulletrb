@@ -15,6 +15,15 @@
 #include <ruby.h>
 
 template<>
+Rice::Object to_ruby<btManifoldPoint>(btManifoldPoint const & x);
+
+template<>
+Rice::Object to_ruby<btAlignedObjectArray<btBroadphaseInterface*> >(btAlignedObjectArray<btBroadphaseInterface*> const & x);
+
+template<>
+Rice::Object to_ruby<btAlignedObjectArray<btCollisionObject*> >(btAlignedObjectArray<btCollisionObject*> const & x);
+
+template<>
 Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x);
 
 template<>
