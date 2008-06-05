@@ -34,6 +34,7 @@ def generate_rbpp
   end    
 
   clean_up_custom(node)
+  rename_functions(node)
   
   puts "creating bindings..."
   e.build
@@ -56,6 +57,10 @@ def generate_rbpp
   
 end
 
+def rename_functions(node)
+  node.classes("btTransform").methods("getOrigin")[0].wrap_as("get_origin")
+end
+
 def wrap_into(mod, classes)
   return if classes.empty?
   classes.delete_if { |c| c.name.nil? }
@@ -68,18 +73,7 @@ def wrap_into(mod, classes)
 end
 
 def clean_up_methods(cls) 
-  methods_hash = {}
   cls.methods.sort_by { |method| method.name}.each do |method|
-    if methods_hash[method.name]
-      if(method.name == "getOrigin")
-        method.calls("Transform_GetOrigin")
-      else
-        method.ignore
-        methods_hash[method.name].ignore
-        puts "  ignoring #{method.name} due to overloading"
-      end
-    end
-    methods_hash[method.name] = method
     
     if  /UserPointer$/ === method.name  ||
         /^free/ === method.name         ||
@@ -130,7 +124,7 @@ def clean_up_custom(node)
   ignore node.structs("btConvexCastResult")
   ignore node.structs("btCollisionAlgorithmConstructionInfo")
   ignore node.classes("btMultiSapBroadphase").structs("btBridgeProxy")
-
+ 
   %w(btNullPairCache btSortedOverlappingPairCache btHashedOverlappingPairCache btOverlappingPairCache).each do |c_name|
     node.classes(c_name).methods.each do |method|
       ignore method if /Pair/ === method.name

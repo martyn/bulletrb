@@ -11,6 +11,7 @@ module RbPlusPlus
       @classes = parser.classes
       @namespaces = parser.namespaces
       @structs = parser.structs
+      @enums = parser.enumerations
     end
     
     def parent
@@ -66,6 +67,18 @@ module RbPlusPlus
       else
         @functions.flatten
       end
-    end  
+    end
+    
+    # Find all enumerations in this scope.
+    #
+    # This method functions like the others
+    def enumerations(name = nil)
+      if name
+        enumerations.find(:name => name)
+      else
+        (@enumerations ? @enumerations.flatten : RbGCCXML::QueryResult.new)
+      end
+    end
+
   end
 end
