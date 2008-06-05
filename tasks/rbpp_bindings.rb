@@ -29,6 +29,10 @@ def generate_rbpp
     f.ignore
   end
   
+  node.structs.each do |s|
+    s.ignore
+  end
+  
   e.module "Bullet" do |m|
     wrap_into( m, [node.classes, node.structs].flatten)
   end    
