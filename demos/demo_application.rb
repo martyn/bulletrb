@@ -21,7 +21,7 @@ class DemoApplication < Shattered::Game
   def initialize
     super
     create_scene_manager(:general)
-    create_camera("main", :position => v(20,20,20))
+    create_camera(:position => v(20,20,20))
     @camera.look_at(v(1,5,-8))
     create_viewport(:color => rgb(0.2,0,0))
     load_resources("media")
@@ -551,11 +551,7 @@ class DemoApplication < Shattered::Game
     @motion_states ||= []
     @motion_states << myMotionState
 
-    cInfo = RigidBodyConstructionInfo.new(mass,myMotionState,shape,localInertia);
-    @cInfos ||= []
-    @cInfos << cInfo
-    
-    body = RigidBody.new(cInfo)
+    body = RigidBody.new(mass,myMotionState,shape,localInertia)
 
     return body
   end

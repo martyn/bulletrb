@@ -39,9 +39,11 @@ describe "Bindings" do
   end
   
   groundShape = nil
+  colShape = nil
   it "exports Shapes" do
-    groundShape = BoxShape.new(Vector3.new(50,50,50))
+    colShape = BoxShape.new(Vector3.new(50,50,50))
     sphereShape = SphereShape.new 1
+    groundShape = StaticPlaneShape.new(Vector3.new(0,1,0),50)
   end
   
   groundTransform = nil
@@ -63,5 +65,9 @@ describe "Bindings" do
   it "exports Transform" do
     Transform.new.get_origin
   end  
+  
+  it "exports local inertia" do
+    colShape.calculate_local_inertia(10,Vector3.new(0,0,0))
+  end
 end
 

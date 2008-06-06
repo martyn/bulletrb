@@ -41,7 +41,7 @@ class BasicDemo < DemoApplication
 #	setCameraDistance(btScalar(50.));
 
 #	///collision configuration contains default setup for memory, collision setup
-    @collisionConfiguration = DefaultCollisionConfiguration.new
+    @collisionConfiguration = DefaultCollisionConfiguration.new(nil,nil,nil)
 
 #	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
     @dispatcher = CollisionDispatcher.new(@collisionConfiguration)
@@ -68,14 +68,12 @@ class BasicDemo < DemoApplication
 
 		localInertia = Vector3.new(0,0,0)
     @motion_states = []
-    @rb_infos = []
+    
 #		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 		myMotionState = DefaultMotionState.new(groundTransform, Transform.get_identity)
-		rbInfo = RigidBody::RigidBodyConstructionInfo.new(mass=0,myMotionState,groundShape,localInertia)
-		body = RigidBody.new(rbInfo)
+  	body = RigidBody.new(mass=0,myMotionState,groundShape,localInertia)
 
 		@collision_objects << body
-		@rb_infos << rbInfo
 		@motion_states << myMotionState
 
 #		//add the body to the dynamics world
@@ -104,11 +102,9 @@ class BasicDemo < DemoApplication
           
           #	using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
   	  		myMotionState = DefaultMotionState.new(startTransform, Transform.get_identity)
-  				rbInfo = RigidBody::RigidBodyConstructionInfo.new(mass,myMotionState,@colShape,localInertia)
-  				body = RigidBody.new(rbInfo)
+  				body = RigidBody.new(mass,myMotionState,@colShape,localInertia)
   				body.show_debug(scene_manager, "test[#{k},#{i},#{j}]", @colShape)
       		@collision_objects << body
-      		@rb_infos << rbInfo
       		@motion_states << myMotionState
       		  				
   				@dynamicsWorld.add_rigid_body(body)
