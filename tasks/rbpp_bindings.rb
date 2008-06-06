@@ -29,10 +29,6 @@ def generate_rbpp
     f.ignore
   end
   
-  node.structs.each do |s|
-    s.ignore
-  end
-  
   e.module "Bullet" do |m|
     wrap_into( m, [node.classes, node.structs].flatten)
   end    
@@ -67,6 +63,7 @@ end
 
 def wrap_into(mod, classes)
   return if classes.empty?
+  classes.each { |c| c.ignore if c.name.nil? }
   classes.delete_if { |c| c.name.nil? }
   classes.sort_by {|c| c.name}.each do |cls|
     clean_up(cls, mod)
@@ -77,24 +74,28 @@ def wrap_into(mod, classes)
 end
 
 def clean_up_methods(cls) 
-  cls.methods.sort_by { |method| method.name}.each do |method|
-    
-    if  /UserPointer$/ === method.name  ||
-        /^free/ === method.name         ||
-        /^allocate/ === method.name     ||
-        /Callback$/ === method.name     ||
-        /deSerializeInPlace$/ === method.name ||
-        /[gsGS]et.*Func$/ === method.name ||
-        /castRay$/ === method.name
-      method.ignore 
-      puts "  ignoring #{method.name} for using void *"
-    end
-    
-    if blacklist_name method.attributes["demangled"]
+  cls.methods.sort_by { |method| method.name}.each do |method|    
+    if blacklist_method(method)
       method.ignore
       puts "  ignoring #{method.name} - blacklisted"
     end
   end
+end
+
+def blacklist_method(method)
+  return true if blacklist_name method.attributes["demangled"]
+  
+  if  (/void *\*/ === method.return_type.to_s) || 
+      (/void *\*/ === method.attributes["demangled"] ||
+      (/Callback/ === method.return_type.to_s) || 
+      (/Callback/ === method.attributes["demangled"]) ||
+      (/Func/ === method.return_type.to_s) || 
+      (/Func/ === method.attributes["demangled"])
+      )
+    puts "  ignoring #{method.name} - void*"
+    return true 
+  end
+  return false
 end
 
 def clean_up_constructors(cls)
@@ -119,8 +120,8 @@ def clean_up_custom(node)
   ignore node.classes("btOptimizedBvh").methods("getSubtreeInfoArray")
   ignore node.classes("btOptimizedBvh").methods("getQuantizedNodeArray")
   ignore node.classes("btTransform").constructors[1..-1]
-  ignore node.structs("btVehicleRaycaster").constructors
-  ignore node.structs("btStorageResult").constructors
+  #ignore node.structs("btVehicleRaycaster").constructors
+  #ignore node.structs("btStorageResult").constructors
   ignore node.structs("btDiscreteCollisionDetectorInterface").structs("Result").constructors
   
   ignore node.structs("btCollisionResult")
@@ -128,6 +129,12 @@ def clean_up_custom(node)
   ignore node.structs("btConvexCastResult")
   ignore node.structs("btCollisionAlgorithmConstructionInfo")
   ignore node.classes("btMultiSapBroadphase").structs("btBridgeProxy")
+  
+  ignore node.classes("btIDebugDraw")
+  
+  origins = node.classes("btTransform").methods("getOrigin")
+  origins[0].ignore
+  origins[1].wrap_as("get_origin")
  
   %w(btNullPairCache btSortedOverlappingPairCache btHashedOverlappingPairCache btOverlappingPairCache).each do |c_name|
     node.classes(c_name).methods.each do |method|
@@ -193,6 +200,7 @@ def blacklist_name(name)
   return true if /16u/ === name
   return true if /AlignedObjectArray/ === name
   return true if /processAllOverlappingPairs/ === name
+  return true if /void *\*/ === name
   ##
 
   return true if /Callback$/ === name

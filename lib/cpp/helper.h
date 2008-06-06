@@ -15,58 +15,16 @@
 #include <ruby.h>
 
 template<>
-Rice::Object to_ruby<btManifoldPoint>(btManifoldPoint const & x);
+Rice::Object to_ruby<unsigned short>(const unsigned short& x);
 
 template<>
-Rice::Object to_ruby<btAlignedObjectArray<btBroadphaseInterface*> >(btAlignedObjectArray<btBroadphaseInterface*> const & x);
-
-template<>
-Rice::Object to_ruby<btAlignedObjectArray<btCollisionObject*> >(btAlignedObjectArray<btCollisionObject*> const & x);
-
-template<>
-Rice::Object to_ruby<btMatrix3x3>(btMatrix3x3 const & x);
-
-template<>
-Rice::Object to_ruby<btTransform>(btTransform const & x); 
-
-template<>
-Rice::Object to_ruby<btVector3>(btVector3 const & x);
-
-template<>
-Rice::Object to_ruby<btQuaternion>(btQuaternion const & x);
+Rice::Object to_ruby<btContactSolverInfo>(btContactSolverInfo const & x);
 
 template<>
 Rice::Object to_ruby<btUnionFind>(btUnionFind const & x);
 
 template<>
 Rice::Object to_ruby<btDispatcherInfo>(btDispatcherInfo const & x);
-
-template<>
-Rice::Object to_ruby<btRigidBody>(btRigidBody const & x);
-
-template<>
-Rice::Object to_ruby<btDynamicsWorldType>(btDynamicsWorldType const & x);
-
-//template<>
-//Rice::Object to_ruby<btTriangle>(btTriangle const & x) ;
-
-template<>
-Rice::Object to_ruby<btTypedConstraintType>(btTypedConstraintType const & x);
-
-template<>
-Rice::Object to_ruby<btWheelInfo>(btWheelInfo const & x);
-
-template<>
-Rice::Object to_ruby<unsigned short>(const unsigned short& x);
-
-template<>
-Rice::Object to_ruby<btBvhSubtreeInfo>(btBvhSubtreeInfo const & x);
-
-template<>
-Rice::Object to_ruby<btVector4>(btVector4 const & x);
-
-template<>
-Rice::Object to_ruby<btContactSolverInfo>(btContactSolverInfo const & x);
 
 template<> 
 btOverlappingPairCache* from_ruby<btOverlappingPairCache*>(Rice::Object x);
