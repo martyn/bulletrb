@@ -134,7 +134,8 @@ def clean_up_custom(node)
   
   origins = node.classes("btTransform").methods("getOrigin")
   origins[0].ignore
-  origins[1].wrap_as("get_origin")
+  origins[1].wrap_as("get_origin").calls("Transform_GetOrigin")
+  node.classes("btTransform").methods("getIdentity").calls("Transform_GetIdentity")
  
   %w(btNullPairCache btSortedOverlappingPairCache btHashedOverlappingPairCache btOverlappingPairCache).each do |c_name|
     node.classes(c_name).methods.each do |method|

@@ -64,6 +64,9 @@ describe "Bindings" do
   
   it "exports Transform" do
     Transform.new.get_origin
+    origin = Transform.get_identity.get_origin
+    Transform.get_identity.set_origin Vector3.new(-1,-1,-1)
+    Transform.get_identity.get_origin.should == origin
   end  
   
   it "exports local inertia" do

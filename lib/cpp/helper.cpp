@@ -87,10 +87,10 @@ btPoolAllocator* from_ruby<btPoolAllocator*>(Rice::Object x) {
   throw std::invalid_argument(s.c_str());
 }
 
-btTransform *Transform_GetIdentity(Rice::Object self) {
+btTransform Transform_GetIdentity() {
   	btTransform *tr = new btTransform();
 		tr->setIdentity();
-		return tr;
+		return *tr; //TODO Memory Leak?
 }
 
 btVector3 *Transform_GetOrigin(btTransform *self) {

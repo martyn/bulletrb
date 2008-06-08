@@ -35,6 +35,9 @@ myMotionState = DefaultMotionState.new groundTransform, Transform.get_identity
 motion_states << myMotionState
 
 body = RigidBody.new 0, myMotionState, groundShape, localInertia
+body.set_world_transform groundTransform
+puts groundTransform.get_origin
+puts "body pos=#{body.get_center_of_mass_position} vel=#{body.get_linear_velocity}"
 collision_objects << body
 
 #add the body to the dynamics world  
@@ -52,13 +55,14 @@ myMotionState = DefaultMotionState.new startTransform, Transform.get_identity
 motion_states << myMotionState
 
 body = RigidBody.new 1, myMotionState, colShape, localInertia
+puts "body pos=#{body.get_center_of_mass_position} vel=#{body.get_linear_velocity}"
 collision_objects << body
 
 dynamicsWorld.add_rigid_body body
 
 #Print out the position of the objects for a few steps
 puts "#{dynamicsWorld.get_num_collision_objects} objects in the world"
-steps = 99
+steps = 9
 start = Time.now
 steps.times do
   dynamicsWorld.step_simulation(1.0/60.0, 10, 1.0/60.0)

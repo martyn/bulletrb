@@ -41,7 +41,7 @@ unsigned short from_ruby<unsigned short>(Rice::Object x);
 template<>
 float const& from_ruby<float const&>(Rice::Object x);
 
-btTransform *Transform_GetIdentity(Rice::Object self);
+btTransform Transform_GetIdentity();
 
 btVector3 *Transform_GetOrigin(btTransform *self);
 
